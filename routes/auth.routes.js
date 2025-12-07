@@ -77,7 +77,7 @@ const pool = require('../db');
 const router = express.Router();
 
 // Secreto de JWT (solo para práctica)
-const JWT_SECRET = 'mi_super_secreto_123';
+const JWT_SECRET = 'secreto123';
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
@@ -89,6 +89,7 @@ router.post('/register', async (req, res) => {
 
   try {
     const [existing] = await pool.query('SELECT id FROM usuario WHERE email = ?', [email]);
+
     if (existing.length > 0) {
       return res.status(400).json({ message: 'El email ya está registrado' });
     }
@@ -107,10 +108,14 @@ router.post('/register', async (req, res) => {
       rol: 'cliente'
     });
   } catch (err) {
-    console.error('Error en /register:', err);
-    return res.status(500).json({ message: 'Error interno en el servidor' });
+    console.error('Error en /register:', err);  
+    return res.status(500).json({
+      message: 'Error interno en el servidor',
+      error: err.message                        
+    });
   }
 });
+
 
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
