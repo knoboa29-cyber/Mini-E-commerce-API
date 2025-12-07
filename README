@@ -1,0 +1,330 @@
+# Mini E-commerce API
+
+Backend sencillo para gestionar usuarios, productos, carritos y pedidos de un mini e-commerce.
+
+## Tecnologías
+
+- Node.js
+- Express
+- MySQL
+- JWT (autenticación con token)
+- bcryptjs (hash de contraseñas)
+
+---
+
+## Requisitos previos
+
+- Node.js instalado
+- MySQL instalado y corriendo
+- Base de datos creada con las tablas:
+  - `usuario`
+  - `producto`
+  - `carrito`
+  - `carrito_item`
+  - `pedido`
+  - `pedido_item`
+
+---
+
+## Configuración del proyecto
+
+### 1. Instalar dependencias
+
+En la carpeta del proyecto:
+
+```bash
+npm install
+Dependencias usadas:
+
+express
+
+cors
+
+dotenv
+
+mysql2
+
+bcryptjs
+
+jsonwebtoken
+
+2. Configurar conexión a MySQL (db.js)
+
+const mysql = require('mysql2/promise');
+require('dotenv').config();
+
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME
+});
+
+module.exports = pool;
+3. Variables de entorno (.env)
+Crear un archivo .env en la raíz del proyecto:
+
+env
+PORT=3000
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=262711
+DB_NAME=mini_ecommerce
+Cambia DB_USER, DB_PASS y DB_NAME según tu entorno.
+
+Ejecutar la API
+En la carpeta del proyecto:
+
+
+node app.js
+Si todo está bien:
+
+text
+
+Servidor escuchando en puerto 3000
+Ruta base:
+
+
+GET http://localhost:3000/
+Respuesta:
+
+json
+
+{ "message": "Mini E-commerce API funcionando" }
+
+------------------------------------------------------------------------
+
+Autenticación
+
+La API usa JWT:
+
+Registrar usuario.
+Hacer login para obtener un token.
+En endpoints protegidos usar:
+
+Authorization: Bearer <token>
+
+------------------------------------------------------------------------
+
+Endpoints
+
+1. Auth
+POST /api/auth/register
+Crea un nuevo usuario (rol cliente por defecto).
+
+Body:
+
+json
+
+{
+  "nombre": "Juan Perez",
+  "email": "juan@example.com",
+  "password": "123456"
+}
+Respuesta:
+
+json
+
+{
+  "id": 1,
+  "nombre": "Juan Perez",
+  "email": "juan@example.com",
+  "rol": "cliente"
+}
+POST /api/auth/login
+Devuelve un token JWT.
+
+Body:
+
+json
+
+{
+  "email": "juan@example.com",
+  "password": "123456"
+}
+Respuesta:
+
+json
+
+{
+  "token": "JWT_AQUI",
+  "usuario": {
+    "id": 1,
+    "nombre": "Juan Perez",
+    "email": "juan@example.com",
+    "rol": "cliente"
+  }
+}
+-------------------------------------------------------------
+
+2. Productos
+
+GET /api/products
+Devuelve la lista de productos.
+
+Respuesta:
+
+json
+
+[
+  {
+    "id": 1,
+    "nombre": "Producto 1",
+    "descripcion": "Descripción del producto 1",
+    "precio": 10.5,
+    "stock": 100
+  }
+]
+GET /api/products/:id
+Devuelve el producto por ID.
+
+
+GET /api/products/1
+POST /api/products
+Crea un nuevo producto (para pruebas).
+
+Body:
+
+json
+
+{
+  "nombre": "Camiseta",
+  "descripcion": "Camiseta negra",
+  "precio": 19.99,
+  "stock": 50
+}
+
+-----------------------------------------------------------
+
+3. Carrito
+
+Requiere: Authorization: Bearer <token>
+
+GET /api/cart
+Obtiene el carrito del usuario autenticado.
+
+Respuesta:
+
+json
+
+{
+  "items": [
+    {
+      "producto_id": 1,
+      "nombre": "Camiseta",
+      "precio": 19.99,
+      "cantidad": 2,
+      "subtotal": 39.98
+    }
+  ],
+  "total": 39.98
+}
+POST /api/cart/items
+Agrega o actualiza un producto en el carrito.
+
+Body:
+
+json
+
+{
+  "producto_id": 1,
+  "cantidad": 2
+}
+Respuesta:
+
+json
+
+{
+  "message": "Producto agregado/actualizado en el carrito"
+}
+
+-------------------------------------------------------------------
+
+4. Pedidos
+
+Requiere: Authorization: Bearer <token>
+
+POST /api/orders
+Crea un pedido a partir del carrito:
+
+Valida stock
+
+Calcula total
+
+Crea pedido y sus items
+
+Descuenta stock
+
+Vacía carrito
+
+Body:
+
+json
+
+{}
+Respuesta:
+
+json
+
+{
+  "id": 5,
+  "usuario_id": 1,
+  "total": 39.98,
+  "estado": "pendiente"
+}
+GET /api/orders
+Historial de pedidos del usuario autenticado.
+
+Respuesta:
+
+json
+
+[
+  {
+    "id": 5,
+    "total": 39.98,
+    "fecha": "2025-12-06T15:30:00.000Z",
+    "estado": "pendiente"
+  }
+]
+GET /api/orders/:id
+Detalle de un pedido del usuario.
+
+GET /api/orders/5
+
+{
+  "id": 5,
+  "usuario_id": 1,
+  "total": 39.98,
+  "fecha": "2025-12-06T15:30:00.000Z",
+  "estado": "pendiente",
+  "items": [
+    {
+      "producto_id": 1,
+      "nombre": "Camiseta",
+      "cantidad": 2,
+      "precio_unitario": 19.99,
+      "subtotal": 39.98
+    }
+  ]
+}
+
+-----------------------------------------------------------------------
+
+Flujo de uso recomendado (Postman)
+
+POST /api/auth/register → registrar usuario.
+
+POST /api/auth/login → obtener token.
+
+GET /api/products → ver productos.
+
+POST /api/cart/items → agregar producto al carrito.
+
+GET /api/cart → revisar carrito.
+
+POST /api/orders → crear pedido.
+
+GET /api/orders → ver historial.
+
+GET /api/orders/:id → ver detalle de un pedido.
