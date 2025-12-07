@@ -1,3 +1,51 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Carrito
+ *   description: Operaciones del carrito de compras
+ */
+
+/**
+ * @swagger
+ * /api/cart:
+ *   get:
+ *     summary: Obtener el carrito del usuario autenticado
+ *     tags: [Carrito]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Carrito encontrado
+ */
+
+/**
+ * @swagger
+ * /api/cart/add:
+ *   post:
+ *     summary: Agregar un producto al carrito
+ *     tags: [Carrito]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productId:
+ *                 type: integer
+ *                 example: 2
+ *               quantity:
+ *                 type: integer
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Producto agregado al carrito
+ */
+
+
+
 // routes/cart.routes.js
 const express = require('express');
 const pool = require('../db');

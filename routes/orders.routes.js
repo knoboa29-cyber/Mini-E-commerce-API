@@ -1,3 +1,37 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Órdenes
+ *   description: Gestión de compras del usuario
+ */
+
+/**
+ * @swagger
+ * /api/orders:
+ *   get:
+ *     summary: Listar órdenes del usuario autenticado
+ *     tags: [Órdenes]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de órdenes
+ */
+
+/**
+ * @swagger
+ * /api/orders:
+ *   post:
+ *     summary: Crear una orden a partir del carrito
+ *     tags: [Órdenes]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       201:
+ *         description: Orden creada exitosamente
+ */
+
+
 // routes/orders.routes.js
 const express = require('express');
 const pool = require('../db');

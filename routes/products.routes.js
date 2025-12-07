@@ -1,3 +1,42 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Productos
+ *   description: Gestión de productos
+ */
+
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     summary: Listar todos los productos
+ *     tags: [Productos]
+ *     responses:
+ *       200:
+ *         description: Lista de productos
+ */
+
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   get:
+ *     summary: Obtener un producto por ID
+ *     tags: [Productos]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del producto
+ *     responses:
+ *       200:
+ *         description: Producto encontrado
+ *       404:
+ *         description: Producto no encontrado
+ */
+
+
 // routes/products.routes.js
 const express = require('express');
 const pool = require('../db');
