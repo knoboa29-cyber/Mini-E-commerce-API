@@ -1,0 +1,291 @@
+{
+	"info": {
+		"_postman_id": "314d7bd6-b075-4aa1-bb44-92d0211abf69",
+		"name": "Ecommerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50519578",
+		"_collection_link": "https://daryl-rios2004-2264700.postman.co/workspace/Daryl-Rios's-Workspace~3d350c60-394d-4d36-8f40-5ab3d5536446/collection/50519578-314d7bd6-b075-4aa1-bb44-92d0211abf69?action=share&source=collection_link&creator=50519578"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "POST /api/auth/register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Daryl\",\r\n  \"email\": \"daryl@test.com\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Respuesta exitosa:\n\n{  \n\"message\": \"Usuario registrado\",  \n\"usuario\": {  \n\"id\": 1,  \n\"nombre\": \"Daryl\",  \n\"email\": \"[daryl@test.com](https://mailto:daryl@test.com)\",  \n\"rol\": \"cliente\"  \n}  \n}\n\nError (mail repetido):\n\n{  \n\"error\": \"El email ya está registrado\"  \n}"
+					},
+					"response": []
+				},
+				{
+					"name": "POST /api/auth/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"daryl@test.com\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Respuesta exitosa:\n\n{  \n\"message\": \"Login exitoso\",  \n\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\"  \n}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "GET-Obtener todos los productos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						},
+						"description": "Respuesta esperada:\n\n\\[  \n{  \n\"id\": 1,  \n\"nombre\": \"Laptop\",  \n\"descripcion\": \"Laptop de alto rendimiento\",  \n\"precio\": 999.99,  \n\"stock\": 10,  \n\"creado_en\": \"2024-11-22T10:00:00.000Z\"  \n},  \n{  \n\"id\": 2,  \n\"nombre\": \"Mouse\",  \n\"descripcion\": \"Mouse inalámbrico\",  \n\"precio\": 19.99,  \n\"stock\": 50,  \n\"creado_en\": \"2024-11-22T11:00:00.000Z\"  \n}  \n\\]\n\nEjemplo error:\n\n{ \"error\": \"Error obteniendo productos\" }"
+					},
+					"response": []
+				},
+				{
+					"name": "GET-Obtener producto por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						},
+						"description": "Ejemplo OK:\n\n{  \n\"id\": 1,  \n\"nombre\": \"Laptop\",  \n\"descripcion\": \"Laptop de alto rendimiento\",  \n\"precio\": 999.99,  \n\"stock\": 10,  \n\"creado_en\": \"2024-11-22T10:00:00.000Z\"  \n}\n\nProducto no encontrado:\n\n{ \"error\": \"Producto no encontrado\" }"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "GET- Obtener carrito del usuario autenticado",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cart",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cart"
+							]
+						},
+						"description": "Ejemplo respuesta:\n\n{  \n\"carrito_id\": 5,  \n\"usuario_id\": 1,  \n\"productos\": \\[  \n{  \n\"producto_id\": 2,  \n\"nombre\": \"Mouse\",  \n\"cantidad\": 3,  \n\"precio_unitario\": 19.99  \n}  \n\\]  \n}\n\nError si token está malo:\n\n{ \"error\": \"Token inválido o expirado\" }"
+					},
+					"response": []
+				},
+				{
+					"name": "POST-Agregar un producto al carrito",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productid\": 1,\r\n  \"quantity\": 2\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cart/add",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"add"
+							]
+						},
+						"description": "Ejemplo OK:\n\n{  \n\"message\": \"Producto agregado al carrito\"  \n}\n\nErrores comunes:\n\nProducto no existe:\n\n{ \"error\": \"Producto no encontrado\" }\n\nStock insuficiente:\n\n{ \"error\": \"Stock insuficiente\" }\n\nToken ausente:\n\n{ \"error\": \"Token no proporcionado\" }"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "GET-Listar órdenes del usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"orders"
+							]
+						},
+						"description": "Respuesta OK:\n\n\\[  \n{  \n\"id\": 10,  \n\"usuario_id\": 1,  \n\"total\": 59.97,  \n\"fecha\": \"2024-11-22T12:00:00.000Z\",  \n\"estado\": \"completado\"  \n}  \n\\]\n\nError sin token:\n\n{ \"error\": \"No autorizado\" }"
+					},
+					"response": []
+				},
+				{
+					"name": "POST-Crear una orden a partir del carrito",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"confirmar\": true\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"orders"
+							]
+						},
+						"description": "Respuesta OK:\n\n{  \n\"message\": \"Orden creada con éxito\",  \n\"order_id\": 15,  \n\"total\": 149.95  \n}\n\nError si carrito vacío:\n\n{ \"error\": \"El carrito está vacío\" }"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "user_id",
+			"value": ""
+		},
+		{
+			"key": "product_id",
+			"value": ""
+		},
+		{
+			"key": "carrito_id",
+			"value": ""
+		}
+	]
+}
