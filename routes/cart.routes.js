@@ -102,5 +102,34 @@ router.post('/add', auth, async (req, res) => {
     return res.status(500).json({ message: 'Error interno en el servidor' });
   }
 });
+// GET /api/cart → obtener carrito del usuario autenticado
+router.get('/', auth, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    // Obtener carrito del usuario
+    const [[carrito]] = await pool.query(
+      'SELECT id FROM carrito WHERE usuario_id = ?',
+      [userId]
+    );
+
+    if (!carrito) {
+      return res.json({ items: [] }); // carrito vacío
+    }
+
+    const [items] = await pool.query(
+      `SELECT ci.producto_id, p.nombre, p.precio, ci.cantidad
+       FROM carrito_item ci
+       JOIN producto p ON ci.producto_id = p.id
+       WHERE ci.carrito_id = ?`,
+      [carrito.id]
+    );
+
+    return res.json({ items });
+  } catch (err) {
+    console.error('Error en GET /api/cart:', err);
+    return res.status(500).json({ message: 'Error interno en el servidor' });
+  }
+});
 
 module.exports = router;
