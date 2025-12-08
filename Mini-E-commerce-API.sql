@@ -74,3 +74,15 @@ CREATE TABLE pedido_item (
         FOREIGN KEY (producto_id) REFERENCES producto(id)
         ON DELETE RESTRICT
 ) ENGINE=InnoDB;
+
+INSERT INTO producto (nombre, descripcion, precio, stock) VALUES
+('Camiseta básica negra', 'Camiseta de algodón unisex, color negro, talla estándar.', 14.99, 50),
+('Pantalón jean azul', 'Jean clásico azul, corte recto, ideal para uso diario.', 29.90, 30),
+('Zapatillas deportivas', 'Zapatillas deportivas ligeras para correr o caminar.', 49.99, 20),
+('Gorra clásica', 'Gorra ajustable, color azul marino con visera curva.', 9.50, 40),
+('Mochila casual', 'Mochila de uso diario, compartimento para laptop 15".', 34.75, 15),
+('Audífonos inalámbricos', 'Audífonos Bluetooth con estuche de carga.', 24.99, 25),
+('Mouse inalámbrico', 'Mouse óptico inalámbrico con receptor USB.', 12.90, 35),
+('Teclado mecánico', 'Teclado mecánico retroiluminado para gaming.', 59.99, 10),
+('Botella térmica 500ml', 'Botella de acero inoxidable, mantiene temperatura.', 18.50, 40),
+('Cuaderno de notas A5', 'Cuaderno de 100 hojas, rayado, tamaño A5.', 3.25, 100);
